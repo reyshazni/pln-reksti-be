@@ -1,0 +1,18 @@
+{
+  "name": "pln-reksti-be",
+  "version": "1.0.0",
+  "description": "backend for pln smart maintenance system",
+  "main": "index.js",
+  "repository": "https://github.com/reyshazni/pln-reksti-be.git",
+  "author": "reyshazni <reyshazni@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^21.3.1",
+    "firebase": "^9.19.1",
+    "nodemon": "^2.0.22"
+  }
+}
