@@ -22,13 +22,19 @@ const app = initializeApp(firebaseConfig);
 
 
 // Get a database reference to our blog
-const db = getDatabase();
 
-function push(data) {
+function push1(data, timestamp) {
   const db = getDatabase();
-  set(ref(db, 'data/vibration/'), {
-    data
+  set(ref(db, 'engine1/'), {
+    data, timestamp
   });
 }
 
-module.exports = { push };
+function push2(data, timestamp) {
+  const db = getDatabase();
+  set(ref(db, 'engine2/'), {
+    data, timestamp
+  });
+}
+
+module.exports = { push1, push2 };

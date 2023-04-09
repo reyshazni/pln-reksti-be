@@ -1,4 +1,4 @@
-const { push } = require('./utils.js');
+const { push1, push2 } = require('./utils.js');
 
 let chanceOfProblem = 0.8
 let prevValue = 0.6; // nilai awal
@@ -30,8 +30,12 @@ function randomizer() {
 function start() {
   console.log('Server is Running!');
   setInterval(() => {
-    const value = randomizer();
-    push(value);
+    const value1 = randomizer();
+    let d = new Date();
+    let timestamp = d.toLocaleString("id-ID")
+    push1(value1, timestamp);
+    const value2 = randomizer();
+    push2(value2, timestamp);
   }, 1000);
 }
 
