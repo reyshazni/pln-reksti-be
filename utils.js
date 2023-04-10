@@ -1,6 +1,6 @@
 const { initializeApp } = require('firebase/app');
 const { getDatabase, ref, set } = require('firebase/database');
-const { getAnalytics } = require('firebase/analytics');
+const { getFirestore, doc, setDoc, collection } = require('firebase/firestore');
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -37,4 +37,30 @@ function push2(data, timestamp) {
   });
 }
 
-module.exports = { push1, push2 };
+async function pushFirestore1(value1, timestamp) {
+  const db = getFirestore(app);
+  var idVibration1 = 1;
+  const collectionRef = collection(db, 'vibrations_1_minutes');
+  const newDocRef = doc(collectionRef); // Automatically generate an incremental id for the new document
+  await setDoc(newDocRef, { 
+    id: newDocRef.id,
+    vibration: value1,
+    timestamp: timestamp
+  });
+  ++idVibration1;
+}
+
+async function pushFirestore2(value2, timestamp) {
+  const db = getFirestore(app);
+  var idVibration2 = 1;
+  const collectionRef = collection(db, 'vibrations_2_minutes');
+  const newDocRef = doc(collectionRef); // Automatically generate an incremental id for the new document
+  await setDoc(newDocRef, { 
+    id: newDocRef.id,
+    vibration: value2,
+    timestamp: timestamp
+  });
+  ++idVibration2;
+}
+
+module.exports = { push1, push2, pushFirestore1, pushFirestore2 };

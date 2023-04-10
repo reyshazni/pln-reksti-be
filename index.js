@@ -1,7 +1,7 @@
-const { push1, push2 } = require('./utils.js');
+const { push1, push2, pushFirestore1, pushFirestore2 } = require('./utils.js');
 
-let chanceOfProblem = 0.8
-let prevValue = 0.6; // nilai awal
+let chanceOfProblem = 0.9
+let prevValue = 0.5; // nilai awal
 
 function randomizer() {
   const delta = Math.random() - 0.5; // nilai random antara -0.5 hingga 0.5
@@ -32,10 +32,16 @@ function start() {
   setInterval(() => {
     const value1 = randomizer();
     let d = new Date();
-    let timestamp = d.toLocaleString("id-ID")
+    let timestamp = d.toLocaleString("id-ID");
+    let minutes = d.getSeconds();
     push1(value1, timestamp);
     const value2 = randomizer();
     push2(value2, timestamp);
+    console.log(minutes);
+    if (minutes==0) {
+      pushFirestore1(value1, timestamp);
+      pushFirestore2(value2, timestamp);
+    }
   }, 1000);
 }
 
