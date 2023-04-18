@@ -9,6 +9,7 @@ PLN Smart Maintenance System memantau dan menjadwalkan maintenance pada komponen
 
 ## Pre-requisite
 - npm@16.x atau lebih terinstall pada komputer/laptop
+- yarn terinstall pada komputer/laptop
 
 ## Install
 - yarn
