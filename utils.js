@@ -1,5 +1,5 @@
 const { initializeApp } = require('firebase/app');
-const { getDatabase, ref, set } = require('firebase/database');
+const { getDatabase, ref, set, onValue } = require('firebase/database');
 const { getFirestore, doc, setDoc, collection } = require('firebase/firestore');
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -23,23 +23,17 @@ const app = initializeApp(firebaseConfig);
 
 // Get a database reference to our blog
 
-function push1(data, timestamp) {
+function push(timeToFailure1, timeToFailure2) {
   const db = getDatabase();
-  set(ref(db, 'engine1/'), {
-    data, timestamp
-  });
-}
-
-function push2(data, timestamp) {
-  const db = getDatabase();
-  set(ref(db, 'engine2/'), {
-    data, timestamp
+  const sootblower = parseInt(timeToFailure1);
+  const boiler = parseInt(timeToFailure2);
+  set(ref(db, 'next_maintenance/'), {
+    sootblower, boiler
   });
 }
 
 async function pushFirestore1(value1, timestamp) {
   const db = getFirestore(app);
-  var idVibration1 = 1;
   const collectionRef = collection(db, 'vibrations_1_minutes');
   const newDocRef = doc(collectionRef); // Automatically generate an incremental id for the new document
   await setDoc(newDocRef, { 
@@ -47,12 +41,10 @@ async function pushFirestore1(value1, timestamp) {
     vibration: value1,
     timestamp: timestamp
   });
-  ++idVibration1;
 }
 
 async function pushFirestore2(value2, timestamp) {
   const db = getFirestore(app);
-  var idVibration2 = 1;
   const collectionRef = collection(db, 'vibrations_2_minutes');
   const newDocRef = doc(collectionRef); // Automatically generate an incremental id for the new document
   await setDoc(newDocRef, { 
@@ -60,7 +52,104 @@ async function pushFirestore2(value2, timestamp) {
     vibration: value2,
     timestamp: timestamp
   });
-  ++idVibration2;
 }
 
-module.exports = { push1, push2, pushFirestore1, pushFirestore2 };
+async function pushReports1(value1, timestamp) {
+  const db = getFirestore(app);
+  const collectionRef = collection(db, 'reports');
+  const newDocRef = doc(collectionRef); // Automatically generate an incremental id for the new document
+  await setDoc(newDocRef, { 
+    id: newDocRef.id,
+    engine: "Sootblower",
+    vibration: value1,
+    timestamp: timestamp
+  });
+}
+
+async function pushReports2(value2, timestamp) {
+  const db = getFirestore(app);
+  const collectionRef = collection(db, 'reports');
+  const newDocRef = doc(collectionRef); // Automatically generate an incremental id for the new document
+  await setDoc(newDocRef, { 
+    id: newDocRef.id,
+    engine: "Boiler",
+    vibration: value2,
+    timestamp: timestamp
+  });
+}
+
+function getDateOnly(dateTimeString) {
+  const dateArray = dateTimeString.split(', ')[0].split('/');
+  const day = dateArray[0];
+  const month = dateArray[1];
+  const year = dateArray[2];
+
+  return `${day}/${month}/${year}`;
+}
+
+function getDateOnlyOh(dateTimeString) {
+  const dateArray = dateTimeString.split(', ')[0].split('/');
+  const day = parseInt(dateArray[0]) + 3;
+  const month = dateArray[1];
+  const year = dateArray[2];
+
+  return `${day}/${month}/${year}`;
+}
+
+async function pushVisMaintenance1(timestamp) {
+  const db = getFirestore(app);
+  const collectionRef = collection(db, 'maintenances');
+  const newDocRef = doc(collectionRef); // Automatically generate an incremental id for the new document
+  const date = getDateOnly(timestamp);
+  await setDoc(newDocRef, { 
+    id: newDocRef.id,
+    component: "Sootblower",
+    date: date,
+    type: "Check-up",
+    status: "On request"
+  });
+}
+
+async function pushVisMaintenance2(timestamp) {
+  const db = getFirestore(app);
+  const collectionRef = collection(db, 'maintenances');
+  const newDocRef = doc(collectionRef); // Automatically generate an incremental id for the new document
+  const date = getDateOnly(timestamp);
+  await setDoc(newDocRef, { 
+    id: newDocRef.id,
+    component: "Boiler",
+    date: date,
+    type: "Check-up",
+    status: "On request"
+  });
+}
+
+async function pushOhMaintenance1(timestamp) {
+  const db = getFirestore(app);
+  const collectionRef = collection(db, 'maintenances');
+  const newDocRef = doc(collectionRef); // Automatically generate an incremental id for the new document
+  const date = getDateOnlyOh(timestamp);
+  await setDoc(newDocRef, { 
+    id: newDocRef.id,
+    component: "Sootblower",
+    date: date,
+    type: "Overhaul",
+    status: "On request"
+  });
+}
+
+async function pushOhMaintenance2(timestamp) {
+  const db = getFirestore(app);
+  const collectionRef = collection(db, 'maintenances');
+  const newDocRef = doc(collectionRef); // Automatically generate an incremental id for the new document
+  const date = getDateOnlyOh(timestamp);
+  await setDoc(newDocRef, { 
+    id: newDocRef.id,
+    component: "Boiler",
+    date: date,
+    type: "Overhaul",
+    status: "On request"
+  });
+}
+
+module.exports = { push, pushFirestore1, pushFirestore2, pushReports1, pushReports2, pushVisMaintenance1, pushVisMaintenance2, pushOhMaintenance1, pushOhMaintenance2};
