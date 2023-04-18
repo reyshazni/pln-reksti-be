@@ -1,6 +1,6 @@
 # PLN Smart Maintenance System Back-end
 
-Hacked by: 
+Hacked by kelompok 12: 
 - Muhammad Rey Shazni Helmi (18220013)
 - Bryan Eagan (18220041)
 - Mochammad Ramadhany (18220087)
